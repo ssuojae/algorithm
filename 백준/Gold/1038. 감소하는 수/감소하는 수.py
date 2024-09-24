@@ -1,46 +1,32 @@
-# 내가 풀었던 답... 시간초과 아오지납리ㅏㅂㅈ러댜ㅓㄹ빋ㄹㅎ
-def main2():
-    input_num = int(input())
-    # 0에서 9까지는 그대로 출력
-    if 0 <= input_num <= 9:
-        print(input_num)
-        return
+# 1. 음이 아닌 정수 X의 자릿수가 가장 큰 자릿수부터 작은 자릿수까지 감소한다면
+# 2. 그 수를 감소하는 수라고 한다. 예를 들어, 321과 950은 감소하는 수지만, 322와 958은 아니다. 
+# 3. N번째 감소하는 수를 출력하는 프로그램을 작성하시오. 0은 0번째 감소하는 수이고, 1은 1번째 감소하는 수이다
+# 4. 만약 N번째 감소하는 수가 없다면 -1을 출력한다.
 
-    count = 9  # 0에서 9까지는 이미 카운트된 상태로 시작
-    # 주어진값 최대: 1,000,000
-    for num in range(10, 9876543210):
-        if is_decrement(num):
-            count+=1
-            if count==input_num:
-                print(num)
-                return
-
-    
-    # 만약 N번째 감소하는 수가 존재하지 않는다면 -1 출력
-    print(-1)
-
-def is_decrement(num):
-    str_num = str(num)
-    for digit in range(len(str_num)-1):
-        if int(str_num[digit]) <= int(str_num[digit+1]):
-            return False
-    return True
-
-
-# 해답지 복사 이분은 조합으로 푸셨네..
 from itertools import combinations
 
-N = int(input())
+# N번째 감소하는 수를 찾는 함수
+def find_nth_decreasing_number(n):
+    # 0부터 9까지의 숫자 중에서 감소하는 숫자를 만들 수 있음
+    decreasing_numbers = []
+    
+    # 각 자릿수 조합을 구함 (1자리, 2자리, ... 10자리)
+    for i in range(1, 11):
+        for comb in combinations(range(10), i):
+            # 각 조합을 역순으로 정렬해서 감소하는 수를 만듦
+            decreasing_numbers.append(int(''.join(map(str, sorted(comb, reverse=True)))))
+    
+    # 감소하는 수들을 정렬
+    decreasing_numbers.sort()
+    
+    # n번째 감소하는 수가 있으면 출력, 없으면 -1 출력
+    if n >= len(decreasing_numbers):
+        return -1
+    else:
+        return decreasing_numbers[n]
 
-result = []
-for i in range(1, 11):
-	for j in combinations(range(10), i):
-		num = ''.join(list(map(str, reversed(list(j)))))
-		result.append(int(num))
+# 입력 받기
+n = int(input())
 
-result.sort()
-if N >= len(result):
-	print(-1)
-else:
-	print(result[N])
-
+# N번째 감소하는 수 출력
+print(find_nth_decreasing_number(n))
